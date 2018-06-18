@@ -1,0 +1,14 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+#history{
+  height: 550px;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
