@@ -13,7 +13,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,24 +43,31 @@ app.use(function (err, req, res, next) {
 });
 
 io.sockets.on('connection', function (socket) {
-
+  
   socket.on('room', function (room) {
     socket.join(room);
-
-    io.in(room).clients((err, clients) => {
+    var users;
+    
+    /*  io.in(room).clients((err, clients) => {
       socket.emit('users in room', clients);
-    });
-
+    });*/
+    
     socket.on('sent link', function (link) {
       io.in(room).emit('received link', link);
     });
-
-// received link
-
-    socket.to(room).emit('user join', socket.id);
-    socket.on('disconnect', function () {
-      socket.to(room).emit('user left', socket.id);
+    
+    socket.on('username', function (username) {
+      users[socket.id] = username;
+      // socket.to(room).emit('user join', username);
+      socket.to(room).emit('user join', username);
+      socket.emit('users in room', users);
+      console.log(users);
+      
+      socket.on('disconnect', function () {
+        socket.to(room).emit('user left', username);
+      });
     });
+   
   });
 });
 

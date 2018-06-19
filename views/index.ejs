@@ -17,28 +17,59 @@
 </head>
 
 <body>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Username</h4>
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input id="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button id="username-button" type="button" class="btn btn-primary">Set</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
 
   <div class="container">
     <h1 class="display-6">
       <%= title %>
     </h1>
 
-    <h5 class="display-9"  id="roomId"> (<%= room %>)</h5>
+    <h5 class="display-9" id="roomId"> (
+      <%= room %>)</h5>
 
     <div class="row mt-5">
 
-      <div align="center" class="col-8 ">
-        <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=false&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false"
-          allowfullscreen="true" frameborder="0" width="100%" height="100%" allow="autoplay"></iframe>
+      <div align="center" class="col-8">
+        <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=true&hideTopBar=true&startWithHD=false&noSiteButtons=true"
+          allowfullscreen="true" frameborder="0" width="100%" height="500px" allow="autoplay"></iframe>
       </div>
 
-      <div class="col-2">
+      <!-- <div class="col-2">
         <h3>History</h3>
         <table class="table table-hover">
           <tbody id="history">
           </tbody>
         </table>
-      </div>
+      </div> -->
 
       <div class="col-2">
         <h3>User list</h3>
@@ -48,7 +79,7 @@
         </table>
       </div>
 
-      <div class="input-group mb-3 mt-5 container">
+      <div class="input-group mb-3 mt-3 container">
         <input id="coub-link-input" type="text" class="form-control" placeholder="Coub link" aria-label="Coub link" aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" id="enter-button" type="button">Enter</button>
@@ -65,12 +96,12 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
-</script>
+  <script>
+    var socket = io();
+  </script>
 
-<script src="/javascripts/socket.js"></script>
-<script src="/javascripts/ui.js"></script>
+  <script src="/javascripts/socket.js"></script>
+  <script src="/javascripts/ui.js"></script>
 </body>
 
 </html>
