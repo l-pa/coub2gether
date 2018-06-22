@@ -52,6 +52,11 @@ io.sockets.on('connection', (socket) => {
       io.in(room).emit('received link', link);
     });
 
+    socket.on('message', (username, text) => {
+      io.in(room).emit('message-received', username, text);
+    });
+
+
 
     socket.on('username', (username) => {
       socket.username = username;

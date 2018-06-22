@@ -15,6 +15,12 @@ function addUser(userId) {
   $('#users').append(tableUser);
 }
 
+function message(user, text) {
+  let $elementToAppend = $('#chat-box');
+  let $data = $(`<p><strong>${text}: </strong>${user}</p>`);
+  $elementToAppend.append($data);
+}
+
 function removeUser(userId) {
   $(`#${userId}`).remove();
 }
@@ -48,6 +54,10 @@ socket.on('connect', () => {
 
   socket.on('username', (user) => {
     $('#username-h3').text(`User list - ${user}`);
+  });
+
+  socket.on('message-received', (user, text) => {
+    message(user, text);
   });
 
 

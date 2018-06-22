@@ -86,4 +86,25 @@ $(document).ready(() => {
       return false;
     }
   });
+
+
+  $('#chat-button').click(() => {
+    if ($.trim($('#message-text-input').val()) === '') {
+      window.alert('Input can not be left blank');
+      return true;
+    }
+    socket.emit('message', $('#message-text-input').val(), $('#username').val());
+    return false;
+  });
+
+  $('#message-text-input').keydown((event) => {
+    if (event.keyCode === 13) {
+      if ($.trim($('#message-text-input').val()) === '') {
+        window.alert('Input can not be left blank');
+        return true;
+      }
+      socket.emit('message', $('#username').val(), $('#message-text-input').val());
+      return false;
+    }
+  });
 });

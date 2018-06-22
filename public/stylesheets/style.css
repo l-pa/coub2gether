@@ -12,3 +12,7 @@ a {
   overflow-y: auto;
   overflow-x: hidden;
 }
+#chat{
+  bottom: 0;
+  position: absolute;
+}
