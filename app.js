@@ -1,16 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-var app = express();
-
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
 
 // view engine setup
@@ -27,12 +26,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -42,37 +41,32 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-io.sockets.on('connection', function (socket) {
-  
-  socket.on('room', function (room) {
+io.sockets.on('connection', (socket) => {
+  socket.on('room', (room) => {
     socket.join(room);
-    var users;
-    
+    let users;
+
     /*  io.in(room).clients((err, clients) => {
       socket.emit('users in room', clients);
-    });*/
-    
-    socket.on('sent link', function (link) {
+  }); */
+
+    socket.on('sent link', (link) => {
       io.in(room).emit('received link', link);
     });
-    
-    socket.on('username', function (username) {
+    socket.on('username', (username) => {
       users[socket.id] = username;
       // socket.to(room).emit('user join', username);
       socket.to(room).emit('user join', username);
       socket.emit('users in room', users);
       console.log(users);
-      
-      socket.on('disconnect', function () {
+      socket.on('disconnect', () => {
         socket.to(room).emit('user left', username);
       });
     });
-   
   });
 });
 
-
-http.listen(3000, function () {
+http.listen(3000, () => {
   console.log('listening on *:3000');
 });
 

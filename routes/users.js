@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('User list');
-});
+router.get('/', function (req, res, next) {
+  res.send('User list')
+})
 
-module.exports = router;
+module.exports = router
