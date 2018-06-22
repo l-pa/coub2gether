@@ -1,13 +1,10 @@
-/* global io */
+/* global socket */
 /* global getCoubId */
 
-
-const socket = io.connect();
 const room = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
 function addUser(userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
-  console.log(tableUser);
   /*   $("#users").append('<div id =' + userId + '>');
        $("#users").append('<tr>');
        $("#users").append('<th scope="row">' + userId + '</th>');
@@ -40,23 +37,19 @@ socket.on('user join', (userId) => {
 socket.on('connect', () => {
   console.log(`Connected to ${room} with ID ${socket.id}`);
   socket.emit('room', room);
-
   //  socket.emit("user join", socket.id);
 
-  socket.on('users in room', (user) => {
-    console.log(user);
-
-    for (const key in user) {
-      // key will be -> 'id'
-      // dictionary[key] -> 'value'
-      addUser(user[key]);
-    }
-  });
+  socket.emit('users in room');
 
   socket.on('user left', (user) => {
     console.log(`User left : ${user}`);
     removeUser(user);
   });
+
+  socket.on('username', (user) => {
+    $('#username-h3').text(`User list - ${user}`);
+  });
+
 
   socket.on('received link', (link) => {
     console.log(`Coub link: ${link}`);

@@ -11,7 +11,6 @@ const io = require('socket.io')(http);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,7 +43,6 @@ app.use((err, req, res) => {
 io.sockets.on('connection', (socket) => {
   socket.on('room', (room) => {
     socket.join(room);
-    let users;
 
     /*  io.in(room).clients((err, clients) => {
       socket.emit('users in room', clients);
@@ -53,14 +51,30 @@ io.sockets.on('connection', (socket) => {
     socket.on('sent link', (link) => {
       io.in(room).emit('received link', link);
     });
+
+
     socket.on('username', (username) => {
-      users[socket.id] = username;
-      // socket.to(room).emit('user join', username);
-      socket.to(room).emit('user join', username);
-      socket.emit('users in room', users);
-      console.log(users);
+      socket.username = username;
+      socket.to(room).emit('user join', socket.username);
+      socket.emit('username', socket.username);
+      const clients = io.sockets.adapter.rooms[room].sockets;
+
+      // to get the number of clients
+      const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
+
+      for (const clientId in clients) {
+        // this is the socket of each client in the room.
+        const clientSocket = io.sockets.connected[clientId];
+
+        // you can do whatever you need with this
+        console.log(`Room : ${room} : ${clientSocket.username}`);
+        socket.emit('user join', clientSocket.username);
+
+       // io.in(room).emit('user join', socket.username);
+      }
+
       socket.on('disconnect', () => {
-        socket.to(room).emit('user left', username);
+        socket.to(room).emit('user left', socket.username);
       });
     });
   });

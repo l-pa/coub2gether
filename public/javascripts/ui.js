@@ -86,12 +86,4 @@ $(document).ready(() => {
       return false;
     }
   });
-
-  // var myCoub = document.getElementById('coubVideo').contentWindow;
-  // var messageHandler = function(e) {
-  //     if (e.data == 'playStarted'){
-  //     console.log('Video starts playing');
-  //     }
-  //   }
-  //   myCoub.addEventListener('message', messageHandler);
 });
