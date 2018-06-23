@@ -17,7 +17,7 @@ function addUser(userId) {
 
 function message(user, text) {
   let $elementToAppend = $('#chat-box');
-  let $data = $(`<p><strong>${text}: </strong>${user}</p>`);
+  let $data = $(`<p><strong>${user}: </strong>${text}</p>`);
   $elementToAppend.append($data);
 }
 

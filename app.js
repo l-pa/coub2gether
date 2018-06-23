@@ -11,6 +11,7 @@ const io = require('socket.io')(http);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -57,7 +58,6 @@ io.sockets.on('connection', (socket) => {
     });
 
 
-
     socket.on('username', (username) => {
       socket.username = username;
       socket.to(room).emit('user join', socket.username);
@@ -75,7 +75,7 @@ io.sockets.on('connection', (socket) => {
         console.log(`Room : ${room} : ${clientSocket.username}`);
         socket.emit('user join', clientSocket.username);
 
-       // io.in(room).emit('user join', socket.username);
+        // io.in(room).emit('user join', socket.username);
       }
 
       socket.on('disconnect', () => {

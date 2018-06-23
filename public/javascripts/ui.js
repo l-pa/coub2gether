@@ -48,7 +48,6 @@ function addHistory(title, thumbnailUrl) {
 
 $(document).ready(() => {
   $('#myModal').modal('show');
-
   $('#username-button').click(() => {
     if ($.trim($('#username').val()) === '') {
       window.alert('Input can not be left blank');
@@ -88,14 +87,14 @@ $(document).ready(() => {
   });
 
 
-  $('#chat-button').click(() => {
-    if ($.trim($('#message-text-input').val()) === '') {
-      window.alert('Input can not be left blank');
-      return true;
-    }
-    socket.emit('message', $('#message-text-input').val(), $('#username').val());
-    return false;
-  });
+  // $('#chat-button').click(() => {
+  //   if ($.trim($('#message-text-input').val()) === '') {
+  //     window.alert('Input can not be left blank');
+  //     return true;
+  //   }
+  //   socket.emit('message', $('#username').val(), $('#message-text-input').val());
+  //   return false;
+  // });
 
   $('#message-text-input').keydown((event) => {
     if (event.keyCode === 13) {
@@ -104,6 +103,8 @@ $(document).ready(() => {
         return true;
       }
       socket.emit('message', $('#username').val(), $('#message-text-input').val());
+      $('#chat-div').animate({ scrollTop: $('#chat-div').prop('scrollHeight') }, 500);
+      $('#message-text-input').val('');
       return false;
     }
   });

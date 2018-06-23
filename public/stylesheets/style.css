@@ -16,3 +16,6 @@ a {
   bottom: 0;
   position: absolute;
 }
+.fixed-content {
+  height: 100%;
+}
