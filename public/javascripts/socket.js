@@ -16,8 +16,8 @@ function addUser(userId) {
 }
 
 function message(user, text) {
-  let $elementToAppend = $('#chat-box');
-  let $data = $(`<p><strong>${user}: </strong>${text}</p>`);
+  const $elementToAppend = $('#chat-box');
+  const $data = $(`<p><strong>${user}: </strong>${text}</p>`);
   $elementToAppend.append($data);
 }
 
@@ -53,7 +53,7 @@ socket.on('connect', () => {
   });
 
   socket.on('username', (user) => {
-    $('#username-h3').text(`User list - ${user}`);
+    $('#username-h3').text('Users');
   });
 
   socket.on('message-received', (user, text) => {
