@@ -49,10 +49,6 @@ io.sockets.on('connection', (socket) => {
   socket.on('room', (room) => {
     socket.join(room);
 
-    /*  io.in(room).clients((err, clients) => {
-      socket.emit('users in room', clients);
-  }); */
-
     socket.on('sent link', (link) => {
       io.in(room).emit('received link', link);
     });

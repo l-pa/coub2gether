@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: var(--siimple-blue);
 }
 
 a {
@@ -13,11 +14,11 @@ a {
   overflow-x: hidden;
 }
 #chat{
-  bottom: 0;
-  position: absolute;
 }
 .fixed-content {
   height: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
+  word-break: break-all;
+  max-height: 420px;
   }
