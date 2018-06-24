@@ -5,64 +5,48 @@
   <title>
     <%= title %>
   </title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous">
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css" />
+
+  <!-- UIkit JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
 
 <body>
-  <!-- The Modal -->
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Username</h4>
-          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">@</span>
-            </div>
-            <input id="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-          </div>
-        </div>
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button id="username-button" type="button" class="btn btn-primary">Set</button>
-        </div>
-
+  <!-- This is the modal -->
+  <div id="modal-example" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+      <h2 class="uk-modal-title">Username</h2>
+      <p>Set your username</p>
+      <div class="uk-margin">
+        <input id="username-input" class="uk-input" type="text" placeholder="Username">
       </div>
+      <p class="uk-text-center">
+        <button id="username-button" class="uk-button uk-button-primary" type="button">Save</button>
+      </p>
     </div>
   </div>
 
-
-  <h1 class="display-6">
+  <h2 class="uk-heading-primary">
     <%= title %>
-  </h1>
+  </h2>
 
-  <h5 class="display-9" id="roomId"> (
+
+  <h5 class="uk-text-lead uk-text-primary" id="roomId"> (
     <%= room %>)</h5>
 
-  <div class="container">
-    <div class="row mt-5">
-
-
-      <!-- <div class="col-2">
+  <div class="uk-flex uk-flex-center">
+    <!-- <div class="col-2">
         <h3>History</h3>
         <table class="table table-hover">
           <tbody id="history">
@@ -70,47 +54,41 @@
         </table>
       </div> -->
 
-      <div class="col-1">
-        <h3 id="username-h3">Users</h3>
-        <table class="table table-hover">
-          <tbody id="users">
+    <div class="">
+      <h3 id="username-h3">Users</h3>
+      <table class="table table-hover">
+        <tbody id="users">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="">
+      <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
+        allowfullscreen="true" frameborder="0" width="500px" height="650px" allow="autoplay"></iframe>
+    </div>
+
+    <div class="">
+      <h3 id="username-h3">Chat</h3>
+      <div class="pre-scrollable fixed-content" id="chat-div">
+        <table class="table table-hover" id="chat-box">
+          <tbody>
           </tbody>
         </table>
       </div>
-      <div align="center" class="col-8">
-        <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=true&hideTopBar=true&startWithHD=false&noSiteButtons=true"
-          allowfullscreen="true" frameborder="0" width="100%" height="500px" allow="autoplay"></iframe>
-      </div>
 
-      <div class="col-3">
-        <h3 id="username-h3">Chat</h3>
-        <div class="pre-scrollable fixed-content" id="chat-div">
-          <table class="table table-hover" id="chat-box">
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="input-group" id="chat">
-          <input id="message-text-input" type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-          <div class="input-group-append">
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="input-group mb-3 mt-5 container">
-        <input id="coub-link-input" type="text" class="form-control" placeholder="Coub link" aria-label="Coub link" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-primary" id="enter-button" type="button">Enter</button>
-        </div>
+      <div id="chat">
+        <input id="message-text-input" class="uk-input" type="text" placeholder="Message">
       </div>
     </div>
-
-
   </div>
 
-  <div class="card-header text-center fixed-bottom">
+  <div class="input-group-append uk-margin-top">
+    <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
+    <!-- <button class="btn btn-primary" id="enter-button" type="button">Enter</button> -->
+  </div>
+
+
+  <div class="footer">
     Made with 💖 from
     <a href="https://github.com/sikrit">@sikrit</a>
   </div>

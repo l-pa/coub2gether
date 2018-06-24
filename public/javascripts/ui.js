@@ -1,5 +1,6 @@
 /* global socket */
 /* global Cookies */
+/* global UIkit */
 
 
 let jsonResult;
@@ -50,15 +51,19 @@ function addHistory(title, thumbnailUrl) {
 
 $(document).ready(() => {
   if (document.cookie.indexOf('username=') === -1) {
-    $('#myModal').modal('show');
+    UIkit.modal('#modal-example', {
+      modal: false, keyboard: false, bgclose: false, center: true,
+    }).show();
     $('#username-button').click(() => {
-      if ($.trim($('#username').val()) === '') {
-        window.alert('Input can not be left blank');
+      if ($.trim($('#username-input').val()) === '') {
+        UIkit.notification('Username cannot be blank!', { status: 'warning', pos: 'bottom-center' });
+        $('#username-input').addClass('uk-form-danger');
         return true;
       }
-      $('#myModal').modal('hide');
-      socket.emit('username', $('#username').val());
-      Cookies.set('username', $('#username').val(), { expires: 7 });
+
+      socket.emit('username', $('#username-input').val());
+      Cookies.set('username', $('#username-input').val(), { expires: 7 });
+      UIkit.modal('#modal-example').hide();
       return false;
     });
   } else {
@@ -67,11 +72,18 @@ $(document).ready(() => {
 
   $('#enter-button').click(() => {
     if ($.trim($('#coub-link-input').val()) === '') {
-      window.alert('Input can not be left blank');
+      $('#coub-link-input').removeClass('uk-form-success');
+      $('#coub-link-input').addClass('uk-form-danger');
+      UIkit.notification('Link cannot be blank!', { status: 'warning', pos: 'bottom-center' });
       return true;
     }
-    const title = getJson(getCoubId($('#coub-link-input').val()));
-    addHistory(title, 'img');
+
+    $('#coub-link-input').removeClass('uk-form-danger');
+    $('#coub-link-input').addClass('uk-form-success');
+
+
+    // const title = getJson(getCoubId($('#coub-link-input').val()));
+    // addHistory(title, 'img');
 
     socket.emit('sent link', $('#coub-link-input').val());
     $('#coub-link-input').val('');
@@ -81,11 +93,15 @@ $(document).ready(() => {
   $('#coub-link-input').keydown((event) => {
     if (event.keyCode === 13) {
       if ($.trim($('#coub-link-input').val()) === '') {
-        window.alert('Input can not be left blank');
+        $('#coub-link-input').removeClass('uk-form-success');
+        $('#coub-link-input').addClass('uk-form-danger');
+        UIkit.notification('Link cannot be blank!', { status: 'warning', pos: 'bottom-center' });
         return true;
       }
-      const title = getJson(getCoubId($('#coub-link-input').val()));
-      addHistory(title, 'img');
+      //  const title = getJson(getCoubId($('#coub-link-input').val())); // TODO
+      //  addHistory(title, 'img');
+      $('#coub-link-input').removeClass('uk-form-danger');
+      $('#coub-link-input').addClass('uk-form-success');
 
       socket.emit('sent link', $('#coub-link-input').val());
       $('#coub-link-input').val('');
@@ -96,7 +112,6 @@ $(document).ready(() => {
   $('#message-text-input').keydown((event) => {
     if (event.keyCode === 13) {
       if ($.trim($('#message-text-input').val()) === '') {
-        window.alert('Input can not be left blank');
         return true;
       }
       socket.emit('message', Cookies.get('username'), $('#message-text-input').val());

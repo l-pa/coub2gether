@@ -1,5 +1,7 @@
 /* global socket */
 /* global getCoubId */
+/* global UIkit */
+
 
 const room = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
@@ -26,7 +28,7 @@ function removeUser(userId) {
 }
 
 function loadIframe(iframeName, url) {
-  const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true`;
+  const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=true&hideTopBar=true&startWithHD=false&noSiteButtons=true`;
   const $iframe = $(`#${iframeName}`);
   if ($iframe.length) {
     $iframe.attr('src', link);
@@ -49,11 +51,14 @@ socket.on('connect', () => {
 
   socket.on('user left', (user) => {
     console.log(`User left : ${user}`);
+    UIkit.notification(`User ${user} left!`, { status: 'danger', pos: 'top-center', timeout: 2000 });
+
     removeUser(user);
   });
 
-  socket.on('username', (user) => {
-    $('#username-h3').text('Users');
+  socket.on('username-join-notification', (user) => {
+  //  $('#username-h3').text('Users');
+    UIkit.notification(`User <strong>${user}</strong> joined!`, { status: 'success', pos: 'top-center', timeout: 2000 });
   });
 
   socket.on('message-received', (user, text) => {

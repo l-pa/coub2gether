@@ -61,7 +61,8 @@ io.sockets.on('connection', (socket) => {
     socket.on('username', (username) => {
       socket.username = username;
       socket.to(room).emit('user join', socket.username);
-      socket.emit('username', socket.username);
+      io.in(room).emit('username-join-notification', socket.username);
+
       const clients = io.sockets.adapter.rooms[room].sockets;
 
       // to get the number of clients
