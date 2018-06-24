@@ -1,4 +1,6 @@
 /* global socket */
+/* global Cookies */
+
 
 let jsonResult;
 
@@ -47,16 +49,22 @@ function addHistory(title, thumbnailUrl) {
 }
 
 $(document).ready(() => {
-  $('#myModal').modal('show');
-  $('#username-button').click(() => {
-    if ($.trim($('#username').val()) === '') {
-      window.alert('Input can not be left blank');
-      return true;
-    }
-    $('#myModal').modal('hide');
-    socket.emit('username', $('#username').val());
-    return false;
-  });
+  if (document.cookie.indexOf('username=') === -1) {
+    $('#myModal').modal('show');
+    $('#username-button').click(() => {
+      if ($.trim($('#username').val()) === '') {
+        window.alert('Input can not be left blank');
+        return true;
+      }
+      $('#myModal').modal('hide');
+      socket.emit('username', $('#username').val());
+      Cookies.set('username', $('#username').val(), { expires: 7 });
+      return false;
+    });
+  } else {
+    Cookies.set('username', Cookies.get('username'), { expires: 7 });
+    socket.emit('username', Cookies.get('username'));
+  }
 
   $('#enter-button').click(() => {
     if ($.trim($('#coub-link-input').val()) === '') {
