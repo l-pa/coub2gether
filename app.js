@@ -27,7 +27,9 @@ app.use('/status', statusRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError(404));
+  res.status(404).render('error');
+
+//  next(createError(404));
 });
 
 // error handler
