@@ -2,8 +2,9 @@
 /* global getCoubId */
 /* global UIkit */
 
-
-const room = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+const room = window.location.href.substring(
+  window.location.href.lastIndexOf("/") + 1
+);
 
 function addUser(userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
@@ -14,11 +15,11 @@ function addUser(userId) {
        $("#users").append('</tr>');
        $("#users").append('</div>'); */
 
-  $('#users').append(tableUser);
+  $("#users").append(tableUser);
 }
 
 function message(user, text) {
-  const $elementToAppend = $('#chat-box');
+  const $elementToAppend = $("#chat-box");
   const $data = $(`<p><strong>${user}: </strong>${text}</p>`);
   $elementToAppend.append($data);
 }
@@ -31,45 +32,55 @@ function loadIframe(iframeName, url) {
   const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=true&hideTopBar=true&startWithHD=false&noSiteButtons=true`;
   const $iframe = $(`#${iframeName}`);
   if ($iframe.length) {
-    $iframe.attr('src', link);
+    $iframe.attr("src", link);
 
     return false;
   }
   return true;
 }
 
-socket.on('user join', (userId) => {
+socket.on("user join", userId => {
   addUser(userId);
 });
 
-socket.on('connect', () => {
+socket.on("connect", () => {
   console.log(`Connected to ${room} with ID ${socket.id}`);
-  socket.emit('room', room);
+  socket.emit("room", room);
   //  socket.emit("user join", socket.id);
 
-  socket.emit('users in room');
+  socket.emit("users in room");
 
-  socket.on('user left', (user) => {
+  socket.on("user left", user => {
     console.log(`User left : ${user}`);
-    UIkit.notification(`User ${user} left!`, { status: 'danger', pos: 'top-center', timeout: 2000 });
+    UIkit.notification(`User ${user} left!`, {
+      status: "danger",
+      pos: "top-center",
+      timeout: 2000
+    });
 
     removeUser(user);
   });
 
-  socket.on('username-join-notification', (user) => {
-  //  $('#username-h3').text('Users');
-    UIkit.notification(`User <strong>${user}</strong> joined!`, { status: 'success', pos: 'top-center', timeout: 2000 });
+  socket.on("username-join-notification", user => {
+    //  $('#username-h3').text('Users');
+    UIkit.notification(`User <strong>${user}</strong> joined!`, {
+      status: "success",
+      pos: "top-center",
+      timeout: 2000
+    });
   });
 
-  socket.on('message-received', (user, text) => {
+  socket.on("message-received", (user, text) => {
     message(user, text);
   });
 
-
-  socket.on('received link', (link) => {
+  socket.on("received link", link => {
     console.log(`Coub link: ${link}`);
-    loadIframe('coubVideo', getCoubId(link));
-    console.log($('#coubVideo').contents());
-    $('#coubVideo').contents().find('div.button-prev-next').remove();
+    loadIframe("coubVideo", getCoubId(link));
+    console.log($("#coubVideo").contents());
+    $("#coubVideo")
+      .contents()
+      .find("div.button-prev-next")
+      .remove();
   });
 });
