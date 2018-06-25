@@ -29,7 +29,7 @@ function removeUser(userId) {
 }
 
 function loadIframe(iframeName, url) {
-  const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=true&hideTopBar=true&startWithHD=false&noSiteButtons=true`;
+  const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false`;
   const $iframe = $(`#${iframeName}`);
   if ($iframe.length) {
     $iframe.attr("src", link);
@@ -52,7 +52,7 @@ socket.on("connect", () => {
 
   socket.on("user left", user => {
     console.log(`User left : ${user}`);
-    UIkit.notification(`User ${user} left!`, {
+    UIkit.notification(`User <strong>${user}</strong> left!`, {
       status: "danger",
       pos: "top-center",
       timeout: 2000
@@ -72,6 +72,10 @@ socket.on("connect", () => {
 
   socket.on("message-received", (user, text) => {
     message(user, text);
+    $("#chat-div").animate(
+      { scrollTop: $("#chat-div").prop("scrollHeight") },
+      500
+    );
   });
 
   socket.on("received link", link => {

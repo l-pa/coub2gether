@@ -43,7 +43,7 @@
   <h5 class="uk-text-lead uk-text-primary" id="roomId"> (
     <%= room %>)</h5>
 
-  <div class="uk-flex uk-flex-center">
+  <div class="uk-flex uk-flex-around">
     <!-- <div class="col-2">
         <h3>History</h3>
         <table class="table table-hover">
@@ -62,15 +62,13 @@
 
     <div class="">
       <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
-        allowfullscreen="true" frameborder="0" width="500px" height="650px" allow="autoplay"></iframe>
+        allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
     </div>
 
     <div class="">
       <h3 id="username-h3">Chat</h3>
-      <div class="pre-scrollable fixed-content" id="chat-div">
+      <div class="uk-overflow-auto fixed-content" id="chat-div">
         <table class="table table-hover" id="chat-box">
-          <tbody>
-          </tbody>
         </table>
       </div>
 
