@@ -5,34 +5,20 @@
 let jsonResult;
 
 function getJson(coubId) {
-  // var link = "http://coub.com/api/oembed.json?url=http%3A//coub.com/view/" + coubId;
-  const link = `https://coub.com/api/v2/coubs/${coubId}`;
+  //  const link = `https://coub.com/api/v2/coubs/${coubId}`;
   $.ajax({
     type: "GET",
     dataType: "jsonp",
-    url: link,
+    url: "https://cors.io/?http://coub.com/api/v2/coubs/" + coubId,
     headers: {
       "Access-Control-Allow-Credentials": true,
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers": "application/json"
+      "Access-Control-Allow-Methods": "GET"
     }
   }).done(data => {
     jsonResult = data;
   });
   window.alert(jsonResult);
-
-  /*   $.getJSON(link, function(data){
-    alert(data);
-  }); */
-  /*
-  fetch(link, {mode: 'no-cors'})
-  .then(res => res.json())
-  .then((out) => {
-    console.log('Checkout this JSON! ', out);
-  })
-  .catch(err => { throw err });
-} */
 }
 function getCoubId(url) {
   const id = url.substring(url.lastIndexOf("/") + 1);
@@ -49,6 +35,10 @@ function addHistory(title, thumbnailUrl) {
 }
 
 $(document).ready(() => {
+  let aa = $.getJSON("https://cors.io/?http://coub.com/api/v2/coubs/18vef7");
+  var obj = jQuery.parseJSON(aa);
+  console.log(obj);
+
   if (document.cookie.indexOf("username=") === -1) {
     UIkit.modal("#modal-example", {
       modal: false,
@@ -97,6 +87,10 @@ $(document).ready(() => {
     return false;
   });
 
+  $("#rng-button").click(() => {
+    $("body").addClass("RAINBOW");
+  });
+
   $("#coub-link-input").keydown(event => {
     if (event.keyCode === 13) {
       if ($.trim($("#coub-link-input").val()) === "") {
@@ -110,10 +104,33 @@ $(document).ready(() => {
       }
       //  const title = getJson(getCoubId($('#coub-link-input').val())); // TODO
       //  addHistory(title, 'img');
-      $("#coub-link-input").removeClass("uk-form-danger");
-      $("#coub-link-input").addClass("uk-form-success");
 
-      socket.emit("sent link", $("#coub-link-input").val());
+      /* fetch(
+        " ,
+        {
+          method: "get"
+        }
+      )
+      .then(function(response) {
+        console.log(response.json());
+        socket.emit("sent link", link);
+        console.log(link);
+        $("#coub-link-input").removeClass("uk-form-danger");
+        
+        //       $("#coub-link-input").addClass("uk-form-danger");
+      })
+      .catch(function(err) {
+        $("#coub-link-input").addClass("uk-form-success");
+        UIkit.notification(err, {
+            status: "warning",
+            pos: "bottom-center"
+          });
+        });*/
+
+      let link = $("#coub-link-input").val();
+
+      getJson(getCoubId(link));
+
       $("#coub-link-input").val("");
       return false;
     }

@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body>
+<body class="">
   <!-- This is the modal -->
   <div id="modal-example" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
@@ -40,8 +40,11 @@
   </h2>
 
 
-  <h5 class="uk-text-lead uk-text-primary" id="roomId"> (
-    <%= room %>)</h5>
+  <h5 class="uk-text-lead uk-text-primary" id="roomId">
+    <a href="">
+      <%= room %>
+    </a>
+  </h5>
 
   <div class="uk-flex uk-flex-around">
     <!-- <div class="col-2">
@@ -78,9 +81,11 @@
     </div>
   </div>
 
-  <div class="input-group-append uk-margin-top">
+  <div class="input-group-append uk-margin-top uk-flex">
     <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
     <!-- <button class="btn btn-primary" id="enter-button" type="button">Enter</button> -->
+    <button class="uk-button uk-button-default" id="rng-button">RNG</button>
+
   </div>
 
 
