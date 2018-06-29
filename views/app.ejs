@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css" />
+
+  <!-- UIkit JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body class="">
+  <!-- This is the modal -->
+  <div id="modal-example" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+      <h2 class="uk-modal-title">Username</h2>
+      <p>Set your username</p>
+      <div class="uk-margin">
+        <input id="username-input" class="uk-input" type="text" placeholder="Username">
+      </div>
+      <p class="uk-text-center">
+        <button id="username-button" class="uk-button uk-button-primary" type="button">Save</button>
+      </p>
+    </div>
+  </div>
+
+  <h2 class="uk-heading-primary">
+    <%= title %>
+  </h2>
+
+
+  <h5 class="uk-text-lead uk-text-primary" id="roomId">
+    <a href="">
+      <%= room %>
+    </a>
+  </h5>
+
+  <div class="uk-flex uk-flex-around">
+    <!-- <div class="col-2">
+        <h3>History</h3>
+        <table class="table table-hover">
+          <tbody id="history">
+          </tbody>
+        </table>
+      </div> -->
+
+    <div class="">
+      <h3 id="username-h3">Users</h3>
+      <table class="table table-hover">
+        <tbody id="users">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="">
+      <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
+        allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
+    </div>
+
+    <div class="">
+      <h3 id="username-h3">Chat</h3>
+      <div class="uk-overflow-auto fixed-content" id="chat-div">
+        <table class="table table-hover" id="chat-box">
+        </table>
+      </div>
+
+      <div id="chat">
+        <input id="message-text-input" class="uk-input" type="text" placeholder="Message">
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group-append uk-margin-top uk-flex">
+    <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
+    <button class="uk-button uk-button-default" id="rng-button">RNG</button>
+
+  </div>
+
+
+  <div class="footer">
+    Made with 💖 from
+    <a href="https://github.com/sikrit">@sikrit</a>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+  </script>
+
+  <script src="/javascripts/socket.js"></script>
+  <script src="/javascripts/ui.js"></script>
+</body>
+
+</html>

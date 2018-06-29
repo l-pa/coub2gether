@@ -82,9 +82,5 @@ socket.on("connect", () => {
     console.log(`Coub link: ${link}`);
     loadIframe("coubVideo", getCoubId(link));
     console.log($("#coubVideo").contents());
-    $("#coubVideo")
-      .contents()
-      .find("div.button-prev-next")
-      .remove();
   });
 });

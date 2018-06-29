@@ -9,7 +9,7 @@ function getJson(coubId) {
   $.ajax({
     type: "GET",
     dataType: "jsonp",
-    url: "https://cors.io/?http://coub.com/api/v2/coubs/" + coubId,
+    url: `https://cors.io/?http://coub.com/api/v2/coubs/${coubId}`,
     headers: {
       "Access-Control-Allow-Credentials": true,
       "Access-Control-Allow-Origin": "*",
@@ -18,7 +18,6 @@ function getJson(coubId) {
   }).done(data => {
     jsonResult = data;
   });
-  window.alert(jsonResult);
 }
 function getCoubId(url) {
   const id = url.substring(url.lastIndexOf("/") + 1);
@@ -35,9 +34,7 @@ function addHistory(title, thumbnailUrl) {
 }
 
 $(document).ready(() => {
-  let aa = $.getJSON("https://cors.io/?http://coub.com/api/v2/coubs/18vef7");
-  var obj = jQuery.parseJSON(aa);
-  console.log(obj);
+  const aa = $.getJSON("https://cors.io/?http://coub.com/api/v2/coubs/18vef7");
 
   if (document.cookie.indexOf("username=") === -1) {
     UIkit.modal("#modal-example", {
@@ -116,7 +113,7 @@ $(document).ready(() => {
         socket.emit("sent link", link);
         console.log(link);
         $("#coub-link-input").removeClass("uk-form-danger");
-        
+
         //       $("#coub-link-input").addClass("uk-form-danger");
       })
       .catch(function(err) {
@@ -125,11 +122,11 @@ $(document).ready(() => {
             status: "warning",
             pos: "bottom-center"
           });
-        });*/
+        }); */
 
-      let link = $("#coub-link-input").val();
+      const link = $("#coub-link-input").val();
 
-      getJson(getCoubId(link));
+      // getJson(getCoubId(link));
 
       $("#coub-link-input").val("");
       return false;
