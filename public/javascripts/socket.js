@@ -33,7 +33,6 @@ function loadIframe(iframeName, url) {
   const $iframe = $(`#${iframeName}`);
   if ($iframe.length) {
     $iframe.attr("src", link);
-
     return false;
   }
   return true;
@@ -81,6 +80,5 @@ socket.on("connect", () => {
   socket.on("received link", link => {
     console.log(`Coub link: ${link}`);
     loadIframe("coubVideo", getCoubId(link));
-    console.log($("#coubVideo").contents());
   });
 });

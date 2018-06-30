@@ -19,6 +19,7 @@ function getJson(coubId) {
     jsonResult = data;
   });
 }
+
 function getCoubId(url) {
   const id = url.substring(url.lastIndexOf("/") + 1);
   return id;
@@ -34,8 +35,6 @@ function addHistory(title, thumbnailUrl) {
 }
 
 $(document).ready(() => {
-  const aa = $.getJSON("https://cors.io/?http://coub.com/api/v2/coubs/18vef7");
-
   if (document.cookie.indexOf("username=") === -1) {
     UIkit.modal("#modal-example", {
       modal: false,
@@ -125,9 +124,9 @@ $(document).ready(() => {
         }); */
 
       const link = $("#coub-link-input").val();
-
+      socket.emit("sent link", link);
       // getJson(getCoubId(link));
-
+      $("#coub-link-input").addClass("uk-form-success");
       $("#coub-link-input").val("");
       return false;
     }

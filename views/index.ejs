@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,800" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/colofilter.css/1.0.0/styles/colofilter.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+
 
     <link rel="stylesheet" href="/stylesheets/index-style.css">
 </head>
@@ -18,26 +23,46 @@
         <div class="hero-body">
             <div class="container has-text-centered">
                 <h1 class="title">Coub2Gether</h1>
+                <!-- <p class="subtitle">Together it`s more fun 😂😂</p> -->
             </div>
         </div>
 
         <div class="hero-foot">
             <div class="container has-text-centered generate-button">
-                <a class="button is-primary is-rounded">Create room</a>
+                <a class="button is-primary is-rounded is-large generate-a">Create room</a>
 
             </div>
         </div>
     </section>
 
-    <section class="section subsection">
-        <div class="container">
-            <h2 class="subtitle">Features</h2>
-            <h2 class="container text">
-                Under
-                <strong> construction</strong>
+    <section class="section">
+        <div class="container has-text-centered">
+            <h2 class="container  section-title">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> from
+                <a href="https://github.com/sikrit">Sikrit</a>
             </h2>
+            <div class="">
+                <i class="fas fa-bug"></i>
+                <i class="fas fa-bug"></i>
+                <i class="fas fa-bug"></i>
+                <i class="fas fa-bug"></i>
+            </div>
         </div>
     </section>
 </body>
+<script>
+    function getRandomRoom() {
+        return Math.random()
+            .toString(36)
+            .substring(9);
+    }
+    $(document).ready(() => {
+        $('.generate-a').click(() => {
+            $('.generate-a').addClass('is-loading');
+            window.open('/room/' + getRandomRoom(), '_self');
+        })
+    });
+</script>
 
 </html>
