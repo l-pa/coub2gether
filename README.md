@@ -1,5 +1,5 @@
 # Coub2gether
-Coub2Gerger, it`s more fun! 😂😂 #javascript #socketio #express
+Coub2Gether, it`s more fun! 😂😂 #javascript #socketio #express
 
 ## Usage
 - Check installation below 
