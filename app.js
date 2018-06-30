@@ -12,6 +12,8 @@ const indexRouter = require('./routes/index');
 const statusRouter = require('./routes/status');
 const appRouter = require('./routes/app');
 
+const port = process.env.PORT || 8080;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -86,8 +88,8 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-http.listen(443, () => {
-  console.log('listening on *:443');
+http.listen(port, () => {
+  console.log(`listening on *${port}`);
 });
 
 module.exports = app;
