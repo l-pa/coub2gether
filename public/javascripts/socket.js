@@ -3,10 +3,10 @@
 /* global UIkit */
 
 const room = window.location.href.substring(
-  window.location.href.lastIndexOf("/") + 1
+  window.location.href.lastIndexOf('/') + 1,
 );
 
-function addUser(userId) {
+function addUser (userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
   /*   $("#users").append('<div id =' + userId + '>');
        $("#users").append('<tr>');
@@ -15,70 +15,70 @@ function addUser(userId) {
        $("#users").append('</tr>');
        $("#users").append('</div>'); */
 
-  $("#users").append(tableUser);
+  $('#users').append(tableUser);
 }
 
-function message(user, text) {
-  const $elementToAppend = $("#chat-box");
+function message (user, text) {
+  const $elementToAppend = $('#chat-box');
   const $data = $(`<p><strong>${user}: </strong>${text}</p>`);
   $elementToAppend.append($data);
 }
 
-function removeUser(userId) {
+function removeUser (userId) {
   $(`#${userId}`).remove();
 }
 
-function loadIframe(iframeName, url) {
+function loadIframe (iframeName, url) {
   const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false`;
   const $iframe = $(`#${iframeName}`);
   if ($iframe.length) {
-    $iframe.attr("src", link);
+    $iframe.attr('src', link);
     return false;
   }
   return true;
 }
 
-socket.on("user join", userId => {
+socket.on('user join', (userId) => {
   addUser(userId);
 });
 
-socket.on("connect", () => {
+socket.on('connect', () => {
   console.log(`Connected to ${room} with ID ${socket.id}`);
-  socket.emit("room", room);
+  socket.emit('room', room);
   //  socket.emit("user join", socket.id);
 
-  socket.emit("users in room");
+  socket.emit('users in room');
 
-  socket.on("user left", user => {
+  socket.on('user left', (user) => {
     console.log(`User left : ${user}`);
     UIkit.notification(`User <strong>${user}</strong> left!`, {
-      status: "danger",
-      pos: "top-center",
-      timeout: 2000
+      status: 'danger',
+      pos: 'top-center',
+      timeout: 2000,
     });
 
     removeUser(user);
   });
 
-  socket.on("username-join-notification", user => {
+  socket.on('username-join-notification', (user) => {
     //  $('#username-h3').text('Users');
     UIkit.notification(`User <strong>${user}</strong> joined!`, {
-      status: "success",
-      pos: "top-center",
-      timeout: 2000
+      status: 'success',
+      pos: 'top-center',
+      timeout: 2000,
     });
   });
 
-  socket.on("message-received", (user, text) => {
+  socket.on('message-received', (user, text) => {
     message(user, text);
-    $("#chat-div").animate(
-      { scrollTop: $("#chat-div").prop("scrollHeight") },
-      500
+    $('#chat-div').animate(
+      { scrollTop: $('#chat-div').prop('scrollHeight') },
+      500,
     );
   });
 
-  socket.on("received link", link => {
+  socket.on('received link', (link) => {
     console.log(`Coub link: ${link}`);
-    loadIframe("coubVideo", getCoubId(link));
+    loadIframe('coubVideo', getCoubId(link));
   });
 });
