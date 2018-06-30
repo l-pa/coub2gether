@@ -1,39 +1,6 @@
 /* global socket */
 /* global Cookies */
 /* global UIkit */
-
-let jsonResult;
-
-function getJson (coubId) {
-  //  const link = `https://coub.com/api/v2/coubs/${coubId}`;
-  $.ajax({
-    type: 'GET',
-    dataType: 'jsonp',
-    url: `https://cors.io/?http://coub.com/api/v2/coubs/${coubId}`,
-    headers: {
-      'Access-Control-Allow-Credentials': true,
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET',
-    },
-  }).done((data) => {
-    jsonResult = data;
-  });
-}
-
-function getCoubId (url) {
-  const id = url.substring(url.lastIndexOf('/') + 1);
-  return id;
-}
-function addHistory (title, thumbnailUrl) {
-  let count = 1;
-  $('#history').append('<tr>');
-  $('#history').append(`<th scope="row">${count}</th>`);
-  $('#history').append(`<td>${title}</td>`);
-  $('#history').append(`<td><img src=${thumbnailUrl}></td>`);
-  $('#history').append('</tr>');
-  count += 1;
-}
-
 $(document).ready(() => {
   if (document.cookie.indexOf('username=') === -1) {
     UIkit.modal('#modal-example', {
@@ -51,7 +18,6 @@ $(document).ready(() => {
         $('#username-input').addClass('uk-form-danger');
         return true;
       }
-
       socket.emit('username', $('#username-input').val());
       Cookies.set('username', $('#username-input').val(), { expires: 7 });
       UIkit.modal('#modal-example').hide();
@@ -60,7 +26,6 @@ $(document).ready(() => {
   } else {
     socket.emit('username', Cookies.get('username'));
   }
-
   $('#enter-button').click(() => {
     if ($.trim($('#coub-link-input').val()) === '') {
       $('#coub-link-input').removeClass('uk-form-success');
@@ -71,28 +36,20 @@ $(document).ready(() => {
       });
       return true;
     }
-
     $('#coub-link-input').removeClass('uk-form-danger');
     $('#coub-link-input').addClass('uk-form-success');
-
-    // const title = getJson(getCoubId($('#coub-link-input').val()));
-    // addHistory(title, 'img');
-
     socket.emit('sent link', $('#coub-link-input').val());
     $('#coub-link-input').val('');
     return false;
   });
-
   $('#rng-button').click(() => {
     $('body').addClass('RAINBOW');
     const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (8 - 4 + 1) + 4));
     $('#coub-link-input').val(link);
     socket.emit('sent link', link);
-    // getJson(getCoubId(link));
     $('#coub-link-input').addClass('uk-form-success');
     $('#coub-link-input').val('');
   });
-
   $('#coub-link-input').keydown((event) => {
     if (event.keyCode === 13) {
       if ($.trim($('#coub-link-input').val()) === '') {
@@ -104,40 +61,13 @@ $(document).ready(() => {
         });
         return true;
       }
-      //  const title = getJson(getCoubId($('#coub-link-input').val())); // TODO
-      //  addHistory(title, 'img');
-
-      /* fetch(
-        " ,
-        {
-          method: "get"
-        }
-      )
-      .then(function(response) {
-        console.log(response.json());
-        socket.emit("sent link", link);
-        console.log(link);
-        $("#coub-link-input").removeClass("uk-form-danger");
-
-        //       $("#coub-link-input").addClass("uk-form-danger");
-      })
-      .catch(function(err) {
-        $("#coub-link-input").addClass("uk-form-success");
-        UIkit.notification(err, {
-            status: "warning",
-            pos: "bottom-center"
-          });
-        }); */
-
       const link = $('#coub-link-input').val();
       socket.emit('sent link', link);
-      // getJson(getCoubId(link));
       $('#coub-link-input').addClass('uk-form-success');
       $('#coub-link-input').val('');
       return false;
     }
   });
-
   $('#message-text-input').keydown((event) => {
     if (event.keyCode === 13) {
       if ($.trim($('#message-text-input').val()) === '') {
@@ -148,7 +78,6 @@ $(document).ready(() => {
         Cookies.get('username'),
         $('#message-text-input').val(),
       );
-      //  $('#chat-div').animate({ scrollTop: $('#chat-div').prop('scrollHeight') }, 500);
       $('#message-text-input').val('');
       return false;
     }
