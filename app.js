@@ -12,7 +12,7 @@ const indexRouter = require('./routes/index');
 const statusRouter = require('./routes/status');
 const appRouter = require('./routes/app');
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080; // HEROKU!!!!!!!
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

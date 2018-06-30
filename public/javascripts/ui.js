@@ -85,6 +85,12 @@ $(document).ready(() => {
 
   $('#rng-button').click(() => {
     $('body').addClass('RAINBOW');
+    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (8 - 4 + 1) + 4));
+    $('#coub-link-input').val(link);
+    socket.emit('sent link', link);
+    // getJson(getCoubId(link));
+    $('#coub-link-input').addClass('uk-form-success');
+    $('#coub-link-input').val('');
   });
 
   $('#coub-link-input').keydown((event) => {
