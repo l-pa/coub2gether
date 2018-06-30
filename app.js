@@ -9,13 +9,7 @@ const io = require('socket.io')(http);
 const indexRouter = require('./routes/index');
 const statusRouter = require('./routes/status');
 
-<<<<<<< HEAD
 const port = process.env.PORT || 8080; // HEROKU!!!!!!!
-=======
-const port = process.env.PORT || 8080;
-
-// view engine setup
->>>>>>> parent of 43d1e4a... rng fixed
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
