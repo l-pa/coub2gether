@@ -5,6 +5,10 @@
 const room = window.location.href.substring(
   window.location.href.lastIndexOf('/') + 1,
 );
+function getCoubId (url) {
+  const id = url.substring(url.lastIndexOf('/') + 1);
+  return id;
+}
 function addUser (userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
   $('#users').append(tableUser);
