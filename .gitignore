@@ -6,5 +6,6 @@ private
 # Files
 config.js
 
-# Copyright
+# Extensions
 *.mp3
+*.png
