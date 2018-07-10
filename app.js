@@ -62,7 +62,8 @@ io.sockets.on('connection', (socket) => {
 
     // json parse not working as expected :(
     function getJson (link) {
-      const url = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
+      const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
+      const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(link)}`;
       console.log(url);
       const urlB = `http://coub.com/api/v2/coubs/${link}`;
 
@@ -70,7 +71,7 @@ io.sockets.on('connection', (socket) => {
         if (err) { return console.log(`${err}`); }
         if (body.title != null) {
         // socket.emit('history', body.title, body.permalink, body.small_picture);
-          io.in(room).emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('history', body.title, getCoubId(body.url), body.thumbnail_url);
         }
       });
     }
