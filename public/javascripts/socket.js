@@ -5,7 +5,6 @@
 const room = window.location.href.substring(
   window.location.href.lastIndexOf('/') + 1,
 );
-
 function addUser (userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
   $('#users').append(tableUser);
@@ -26,11 +25,9 @@ function message (user, text) {
   const $data = $(`<p><strong>${user}: </strong>${text}</p>`);
   $elementToAppend.append($data);
 }
-
 function removeUser (userId) {
   $(`#${userId}`).remove();
 }
-
 function loadIframe (iframeName, url) {
   const link = `https://coub.com/embed/${url}?muted=false&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false`;
   const $iframe = $(`#${iframeName}`);
@@ -40,11 +37,9 @@ function loadIframe (iframeName, url) {
   }
   return true;
 }
-
 socket.on('user join', (userId) => {
   addUser(userId);
 });
-
 socket.on('connect', () => {
   console.log(`Connected to ${room} with ID ${socket.id}`);
   socket.emit('room', room);
@@ -64,7 +59,6 @@ socket.on('connect', () => {
   });
 
   socket.on('username-join-notification', (user) => {
-    //  $('#username-h3').text('Users');
     UIkit.notification(`User <strong>${user}</strong> joined!`, {
       status: 'success',
       pos: 'top-center',
