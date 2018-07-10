@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const request = require('request');
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -13,6 +15,7 @@ const statusRouter = require('./routes/status');
 const appRouter = require('./routes/app');
 
 const port = process.env.PORT || 8080; // HEROKU!!!!!!!
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +36,12 @@ app.use((req, res, next) => {
   //  next(createError(404));
 });
 
+function getCoubId (url) {
+  const id = url.substring(url.lastIndexOf('/') + 1);
+  return id;
+}
+
+
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
@@ -52,7 +61,32 @@ io.sockets.on('connection', (socket) => {
   socket.on('room', (room) => {
     socket.join(room);
 
+    // json parse not working as expected :(
+    function getJson (link) {
+      const url = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
+      console.log(url);
+      const urlB = `http://coub.com/api/v2/coubs/${link}`;
+
+      request(url, { json: true }, (err, res, body) => {
+        if (err) { return console.log(`${err}`); }
+        if (body.title != null) {
+        // socket.emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('history', body.title, body.permalink, body.small_picture);
+        }
+      });
+    }
+
+    socket.on('history link', (link) => {
+      io.in(room).emit('received link', link);
+    });
+
     socket.on('sent link', (link) => {
+      getJson(link);
+      io.in(room).emit('received link', link);
+    });
+
+    socket.on('rng', (link) => {
+      getJson(link);
       io.in(room).emit('received link', link);
     });
 
@@ -71,14 +105,9 @@ io.sockets.on('connection', (socket) => {
       const numClients = typeof clients !== 'undefined' ? Object.keys(clients).length : 0;
 
       for (const clientId in clients) {
-        // this is the socket of each client in the room.
         const clientSocket = io.sockets.connected[clientId];
-
-        // you can do whatever you need with this
         console.log(`Room : ${room} : ${clientSocket.username}`);
         socket.emit('user join', clientSocket.username);
-
-        // io.in(room).emit('user join', socket.username);
       }
 
       socket.on('disconnect', () => {
@@ -87,6 +116,7 @@ io.sockets.on('connection', (socket) => {
     });
   });
 });
+
 
 http.listen(port, () => {
   console.log(`listening on *${port}`);

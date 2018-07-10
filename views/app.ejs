@@ -12,6 +12,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
@@ -20,9 +23,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body class="">
-  <!-- This is the modal -->
-  <div id="modal-example" uk-modal>
+<body>
+  <div id="modal-username" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
       <h2 class="uk-modal-title">Username</h2>
       <p>Set your username</p>
@@ -34,6 +36,42 @@
       </p>
     </div>
   </div>
+
+  <div class="uk-offcanvas-content">
+    <div id="offcanvas-flip" uk-offcanvas="flip: true; overlay: false">
+      <div class="uk-offcanvas-bar">
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+        <!-- <button id="username-change-button" class="uk-button uk-button-default uk-button-small" style="margin-bottom:20px; ">Change username</button> -->
+        <div class="">
+          <h3 id="username-h3">Users</h3>
+          <table class="table table-hover">
+            <tbody id="users">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sideEntry">
+          <h3 id="username-h3">History</h3>
+          <table class="table table-hover">
+            <tbody id="coubHistory">
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="topright">
+    <a uk-toggle="target: #offcanvas-flip">
+
+      <i class="material-icons md-36">
+        menu
+      </i>
+    </a>
+  </div>
+
 
   <h2 class="uk-heading-primary">
     <%= title %>
@@ -56,14 +94,6 @@
       </div> -->
 
     <div class="">
-      <h3 id="username-h3">Users</h3>
-      <table class="table table-hover">
-        <tbody id="users">
-        </tbody>
-      </table>
-    </div>
-
-    <div class="">
       <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
         allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
     </div>
@@ -80,11 +110,9 @@
       </div>
     </div>
   </div>
-
   <div class="input-group-append uk-margin-top uk-flex">
     <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
     <button class="uk-button uk-button-default" id="rng-button">RNG</button>
-
   </div>
 
 

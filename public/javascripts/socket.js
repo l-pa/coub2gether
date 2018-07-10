@@ -8,14 +8,17 @@ const room = window.location.href.substring(
 
 function addUser (userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
-  /*   $("#users").append('<div id =' + userId + '>');
-       $("#users").append('<tr>');
-       $("#users").append('<th scope="row">' + userId + '</th>');
-       $("#users").append('<td>' + Date.now() + '</td>');
-       $("#users").append('</tr>');
-       $("#users").append('</div>'); */
-
   $('#users').append(tableUser);
+}
+
+let count = 1;
+function addHistory (title, permalink, thumbnailUrl) {
+  $('#coubHistory').prepend('<tr>');
+  $('#coubHistory').prepend(`<th scope="row">${count}</th>`);
+  $('#coubHistory').prepend(`<td>${title}</td>`);
+  $('#coubHistory').prepend(`<td><img class="imageHistory" id=${permalink} src=${thumbnailUrl}></td>`);
+  $('#coubHistory').prepend('</tr>');
+  count += 1;
 }
 
 function message (user, text) {
@@ -75,6 +78,15 @@ socket.on('connect', () => {
       { scrollTop: $('#chat-div').prop('scrollHeight') },
       500,
     );
+  });
+
+  socket.on('history', (title, permalink, thumbnail) => {
+    addHistory(title, permalink, thumbnail);
+    UIkit.notification(`${title}`, {
+      status: 'success',
+      pos: 'bottom-right',
+      timeout: 1000,
+    });
   });
 
   socket.on('received link', (link) => {
