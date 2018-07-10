@@ -1,27 +1,33 @@
 .land {
-  background-image: url("https://source.unsplash.com/2QXy7KDODyg/1920x1080"); /* TODO Dynamic change, minify */
+  background-image: url("https://source.unsplash.com/collection/1020268/1600x900"); /* TODO Dynamic change, minify */
   background-size: cover;
+  /*height: 825px; */
+  filter: grayscale(0.5);
+  height: 100vh;
 }
 .title {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 800;
   color: #ffffff;
   font-size: 7em;
+  margin-top: 0;
+  padding-top: 15%;
+}
+.title span {
+  background-color: rgba(26, 82, 118, 0.7);
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .subtitle {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 400;
   color: #ffffff;
   font-size: 3em;
 }
 .section-title {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 600;
+  padding-top: 30px;
   color: #000000;
-  font-size: 2.5em;
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: 1.5em;
 }
 .text {
-  font-family: "Open Sans", sans-serif;
   font-weight: 300;
   color: #000000;
 }
@@ -29,7 +35,20 @@
   background-color: #eeeeee;
 }
 .generate-button {
+  padding-top: 100px;
   width: 200px;
   height: 200px;
-  margin-bottom: 10em;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+.material-icons.md-36 {
+  font-size: 36px;
 }

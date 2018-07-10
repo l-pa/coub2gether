@@ -41,8 +41,9 @@
                 <i class="fas fa-bug"></i>
                 <i class="fas fa-bug"></i>
             </div>
+
         </div>
-    </section>
+        </div>
 </body>
 <script>
     function getRandomRoom() {
@@ -52,7 +53,7 @@
     }
     $(document).ready(() => {
         $('.generate-a').click(() => {
-            $('.generate-a').addClass('is-loading');
+            $('.generate-a').addClass('scale-transition scale-out');
             window.open('/room/' + getRandomRoom(), '_self');
         })
     });

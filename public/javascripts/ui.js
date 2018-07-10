@@ -3,7 +3,7 @@
 /* global UIkit */
 $(document).ready(() => {
   if (document.cookie.indexOf('username=') === -1) {
-    UIkit.modal('#modal-example', {
+    UIkit.modal('#modal-username', {
       modal: false,
       keyboard: false,
       bgclose: false,
@@ -43,8 +43,7 @@ $(document).ready(() => {
     return false;
   });
   $('#rng-button').click(() => {
-    $('body').addClass('RAINBOW');
-    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (8 - 4 + 1) + 4));
+    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (6 - 4 + 1) + 4));
     $('#coub-link-input').val(link);
     socket.emit('sent link', link);
     $('#coub-link-input').addClass('uk-form-success');

@@ -3,6 +3,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const request = require('request');
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -35,6 +37,12 @@ io.sockets.on('connection', (socket) => {
   socket.on('room', (room) => {
     socket.join(room);
     socket.on('sent link', (link) => {
+      getJson(link);
+      io.in(room).emit('received link', link);
+    });
+
+    socket.on('rng', (link) => {
+      getJson(link);
       io.in(room).emit('received link', link);
     });
     socket.on('message', (username, text) => {

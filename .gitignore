@@ -1,0 +1,11 @@
+
+#Folders
+node_modules
+private
+
+# Files
+config.js
+
+# Extensions
+*.mp3
+*.png

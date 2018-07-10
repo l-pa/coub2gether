@@ -67,6 +67,15 @@ socket.on('connect', () => {
     );
   });
 
+  socket.on('history', (title, permalink, thumbnail) => {
+    addHistory(title, permalink, thumbnail);
+    UIkit.notification(`${title}`, {
+      status: 'success',
+      pos: 'bottom-right',
+      timeout: 1000,
+    });
+  });
+
   socket.on('received link', (link) => {
     console.log(`Coub link: ${link}`);
     loadIframe('coubVideo', getCoubId(link));
