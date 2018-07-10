@@ -13,6 +13,17 @@ function addUser (userId) {
   const tableUser = `<div id="${userId}"><tr><th scope="row">${userId}</th></tr></div>`;
   $('#users').append(tableUser);
 }
+
+let count = 1;
+function addHistory (title, permalink, thumbnailUrl) {
+  $('#coubHistory').prepend('<tr>');
+  $('#coubHistory').prepend(`<th scope="row">${count}</th>`);
+  $('#coubHistory').prepend(`<td>${title}</td>`);
+  $('#coubHistory').prepend(`<td><img class="imageHistory" id=${permalink} src=${thumbnailUrl}></td>`);
+  $('#coubHistory').prepend('</tr>');
+  count += 1;
+}
+
 function message (user, text) {
   const $elementToAppend = $('#chat-box');
   const $data = $(`<p><strong>${user}: </strong>${text}</p>`);
