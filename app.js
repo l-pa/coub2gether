@@ -40,8 +40,6 @@ function getCoubId (url) {
   const id = url.substring(url.lastIndexOf('/') + 1);
   return id;
 }
-
-
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
@@ -60,12 +58,9 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('room', (room) => {
     socket.join(room);
-
-    // json parse not working as expected :(
     function getJson (link) {
       const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
       const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(link)}`;
-      console.log(url);
       const urlB = `http://coub.com/api/v2/coubs/${link}`;
 
       request(url, { json: true }, (err, res, body) => {
@@ -73,6 +68,8 @@ io.sockets.on('connection', (socket) => {
         if (body.title != null) {
         // socket.emit('history', body.title, body.permalink, body.small_picture);
           io.in(room).emit('history', body.title, getCoubId(body.url), body.thumbnail_url);
+        } else {
+
         }
       });
     }

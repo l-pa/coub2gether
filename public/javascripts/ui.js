@@ -10,6 +10,7 @@ function getCoubId (url) {
 }
 
 $(document).ready(() => {
+
   if (document.cookie.indexOf('username=') === -1) {
     UIkit.modal('#modal-username', {
       modal: false,

@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 
 router.get("/room/:roomid", (req, res) => {
   roomId = req.params.roomid;
-  res.render("app", { title: "Coub2gether", room: roomId });
+  res.render("app", { title: "Coub2Gether", room: roomId });
 });
 
 module.exports = router;

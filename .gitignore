@@ -5,7 +5,7 @@ private
 
 # Files
 config.js
+generate.mp3
 
 # Extensions
-*.mp3
 *.png
