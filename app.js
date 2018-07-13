@@ -1,127 +1,139 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const createError = require('http-errors')
+const express = require('express')
+const path = require('path')
+const cookieParser = require('cookie-parser')
+const logger = require('morgan')
 
-const request = require('request');
+const request = require('request')
 
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const app = express()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
-const indexRouter = require('./routes/index');
-const statusRouter = require('./routes/status');
-const appRouter = require('./routes/app');
+const indexRouter = require('./routes/index')
+const statusRouter = require('./routes/status')
+const appRouter = require('./routes/app')
 
-const port = process.env.PORT || 8080; // HEROKU!!!!!!!
-
+const port = process.env.PORT || 8080 // HEROKU!!!!!!!
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter);
-app.use('/status', statusRouter);
+app.use('/', indexRouter)
+app.use('/status', statusRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.status(404).render('error');
+  res.status(404).render('error')
   //  next(createError(404));
-});
+})
 
 function getCoubId (url) {
-  const id = url.substring(url.lastIndexOf('/') + 1);
-  return id;
+  const id = url.substring(url.lastIndexOf('/') + 1)
+  return id
 }
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  res.status(err.status || 500)
+  res.render('error')
+})
 
 function getRandomString (min, max) {
-  return Math.random().toString(36).substr(2, Math.floor(Math.random() * (max - min + 1) + min));
+  return Math.random()
+    .toString(36)
+    .substr(2, Math.floor(Math.random() * (max - min + 1) + min))
 }
 
-io.sockets.on('connection', (socket) => {
+io.sockets.on('connection', socket => {
   socket.on('get all rooms', () => {
-    socket.emit('rooms info', io.sockets.adapter.rooms);
-  });
+    socket.emit('rooms info', io.sockets.adapter.rooms)
+  })
 
-  socket.on('room', (room) => {
-    socket.join(room);
+  socket.on('room', room => {
+    socket.join(room)
     function getJson (link) {
-      const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
-      const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(link)}`;
-      const urlB = `http://coub.com/api/v2/coubs/${link}`;
+      const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(
+        link
+      )}` // official coub api with proxy, long response
+      const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(
+        link
+      )}` // undocumented coub api, works!
+      const urlB = `http://coub.com/api/v2/coubs/${link}` // official coub api, => error
 
       request(url, { json: true }, (err, res, body) => {
-        if (err) { return console.log(`${err}`); }
-        if (body.title != null) {
-        // socket.emit('history', body.title, body.permalink, body.small_picture);
-          io.in(room).emit('received link', getCoubId(body.url));
-          io.in(room).emit('history', body.title, getCoubId(body.url), body.thumbnail_url);
-        } else {
-          getJson(getRandomString(4, 6));
+        if (err) {
+          return console.log(`${err}`)
         }
-      });
+        if (body.title != null) {
+          // socket.emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('received link', getCoubId(body.url))
+          io.in(room).emit(
+            'history',
+            body.title,
+            getCoubId(body.url),
+            body.thumbnail_url
+          )
+        } else {
+          getJson(getRandomString(4, 6))
+        }
+      })
     }
 
-    socket.on('history link', (link) => {
-      io.in(room).emit('received link', link);
-    });
+    socket.on('history link', link => {
+      io.in(room).emit('received link', link)
+    })
 
-    socket.on('sent link', (link) => {
-      getJson(link);
-      io.in(room).emit('received link', link);
-    });
+    socket.on('sent link', link => {
+      getJson(link)
+      io.in(room).emit('received link', link)
+    })
 
     socket.on('rng', () => {
-      getJson(getRandomString(4, 6));
-    });
+      getJson(getRandomString(4, 6))
+    })
 
     socket.on('message', (username, text) => {
-      io.in(room).emit('message-received', username, text);
-    });
+      io.in(room).emit('message-received', username, text)
+    })
 
-    socket.on('username', (username) => {
-      socket.username = username;
-      socket.to(room).emit('user join', socket.username);
-      io.in(room).emit('username-join-notification', socket.username);
+    socket.on('username', username => {
+      socket.username = username
+      socket.to(room).emit('user join', socket.username)
+      io.in(room).emit('username-join-notification', socket.username)
 
-      const clients = io.sockets.adapter.rooms[room].sockets;
+      const clients = io.sockets.adapter.rooms[room].sockets
 
       // to get the number of clients
-      const numClients = typeof clients !== 'undefined' ? Object.keys(clients).length : 0;
+      const numClients =
+        typeof clients !== 'undefined' ? Object.keys(clients).length : 0
 
       for (const clientId in clients) {
-        const clientSocket = io.sockets.connected[clientId];
-        console.log(`Room : ${room} : ${clientSocket.username}`);
-        socket.emit('user join', clientSocket.username);
+        const clientSocket = io.sockets.connected[clientId]
+        console.log(`Room : ${room} : ${clientSocket.username} : ${numClients}`)
+        socket.emit('user join', clientSocket.username)
       }
 
       socket.on('disconnect', () => {
-        socket.to(room).emit('user left', socket.username);
-      });
-    });
-  });
-});
-
+        socket.to(room).emit('user left', socket.username)
+      })
+    })
+  })
+})
 
 http.listen(port, () => {
-  console.log(`listening on *${port}`);
-});
+  console.log(`listening on *${port}`)
+})
 
-module.exports = app;
+module.exports = app
