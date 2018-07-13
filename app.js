@@ -39,8 +39,6 @@ function getCoubId (url) {
   const id = url.substring(url.lastIndexOf('/') + 1);
   return id;
 }
-
-
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
@@ -52,6 +50,10 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
+function getRandomString (min, max) {
+  return Math.random().toString(36).substr(2, Math.floor(Math.random() * (max - min + 1) + min));
+}
+
 io.sockets.on('connection', (socket) => {
   socket.on('get all rooms', () => {
     socket.emit('rooms info', io.sockets.adapter.rooms);
@@ -59,19 +61,19 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('room', (room) => {
     socket.join(room);
-
-    // json parse not working as expected :(
     function getJson (link) {
       const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(link)}`;
       const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(link)}`;
-      console.log(url);
       const urlB = `http://coub.com/api/v2/coubs/${link}`;
 
       request(url, { json: true }, (err, res, body) => {
         if (err) { return console.log(`${err}`); }
         if (body.title != null) {
         // socket.emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('received link', getCoubId(body.url));
           io.in(room).emit('history', body.title, getCoubId(body.url), body.thumbnail_url);
+        } else {
+          getJson(getRandomString(4, 6));
         }
       });
     }
@@ -85,9 +87,8 @@ io.sockets.on('connection', (socket) => {
       io.in(room).emit('received link', link);
     });
 
-    socket.on('rng', (link) => {
-      getJson(link);
-      io.in(room).emit('received link', link);
+    socket.on('rng', () => {
+      getJson(getRandomString(4, 6));
     });
 
     socket.on('message', (username, text) => {

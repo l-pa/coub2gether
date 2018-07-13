@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -14,6 +14,9 @@
   <title>
     <%= title %>
   </title>
+  <meta name="description" content="Coub2gether is a small web app where you can watch coubs from Coub with your friends. Simple as copy and paste.">
+  <link rel="icon" href="favicon.ico" type="image/ico" sizes="16x16">
+
   <!-- UIkit CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css" />
 
@@ -52,7 +55,7 @@
         <button class="uk-offcanvas-close" type="button" uk-close></button>
         <!-- <button id="username-change-button" class="uk-button uk-button-default uk-button-small" style="margin-bottom:20px; ">Change username</button> -->
         <div class="">
-          <h3 id="username-h3">Users</h3>
+          <h3 id="users-title">Users</h3>
           <table class="table table-hover">
             <tbody id="users">
             </tbody>
@@ -60,13 +63,12 @@
         </div>
 
         <div class="sideEntry">
-          <h3 id="username-h3">History</h3>
+          <h3 id="">History</h3>
           <table class="table table-hover">
             <tbody id="coubHistory">
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
 
@@ -84,18 +86,18 @@
 
   <h2 class="uk-heading-primary">
     <%= title %>
+      <h5 class="uk-text-lead uk-text-primary" id="roomId">
+        <a>
+          <%= room %>
+        </a>
+      </h5>
   </h2>
 
 
-  <h5 class="uk-text-lead uk-text-primary" id="roomId">
-    <a href="">
-      <%= room %>
-    </a>
-  </h5>
 
   <div class="uk-flex uk-flex-around">
     <div class="">
-      <iframe id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
+      <iframe class="uk-animation-fade" id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
         allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
     </div>
 
