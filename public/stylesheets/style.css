@@ -58,3 +58,8 @@ h5 {
 .sideEntry {
   margin-top: 20px;
 }
+.control-buttons {
+  padding-top: 20px;
+  width: 15%;
+  margin: 0 auto;
+}
