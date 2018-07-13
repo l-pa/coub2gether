@@ -10,7 +10,6 @@ function getCoubId (url) {
 }
 
 $(document).ready(() => {
-
   if (document.cookie.indexOf('username=') === -1) {
     UIkit.modal('#modal-username', {
       modal: false,
@@ -69,10 +68,10 @@ $(document).ready(() => {
     return false;
   });
   $('#rng-button').click(() => {
-    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (6 - 4 + 1) + 4));
-    $('#coub-link-input').val(link);
-    socket.emit('rng', link);
-    $('#coub-link-input').val('');
+    //    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (6 - 4 + 1) + 4));
+    socket.emit('rng');
+    /* $('#coub-link-input').val(link);
+    $('#coub-link-input').val(''); */
   });
   $('#coub-link-input').keydown((event) => {
     if (event.keyCode === 13) {

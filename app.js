@@ -51,6 +51,10 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
+function getRandomString (min, max) {
+  return Math.random().toString(36).substr(2, Math.floor(Math.random() * (max - min + 1) + min));
+}
+
 io.sockets.on('connection', (socket) => {
   socket.on('get all rooms', () => {
     socket.emit('rooms info', io.sockets.adapter.rooms);
@@ -67,9 +71,10 @@ io.sockets.on('connection', (socket) => {
         if (err) { return console.log(`${err}`); }
         if (body.title != null) {
         // socket.emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('received link', getCoubId(body.url));
           io.in(room).emit('history', body.title, getCoubId(body.url), body.thumbnail_url);
         } else {
-
+          getJson(getRandomString(4, 6));
         }
       });
     }
@@ -83,9 +88,8 @@ io.sockets.on('connection', (socket) => {
       io.in(room).emit('received link', link);
     });
 
-    socket.on('rng', (link) => {
-      getJson(link);
-      io.in(room).emit('received link', link);
+    socket.on('rng', () => {
+      getJson(getRandomString(4, 6));
     });
 
     socket.on('message', (username, text) => {

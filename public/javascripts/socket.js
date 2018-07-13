@@ -39,7 +39,7 @@ function loadIframe (iframeName, url) {
 }
 socket.on('user join', (userId) => {
   addUser(userId);
-  $('#users-title').text('Users ('+$('tbody#users').children('div').length + ')');
+  $('#users-title').text(`Users (${$('tbody#users').children('div').length})`);
 });
 socket.on('connect', () => {
   console.log(`Connected to ${room} with ID ${socket.id}`);
@@ -57,7 +57,7 @@ socket.on('connect', () => {
     });
 
     removeUser(user);
-    $('#users-title').text('Users ('+$('tbody#users').children('div').length + ')');
+    $('#users-title').text(`Users (${$('tbody#users').children('div').length})`);
   });
 
   socket.on('username-join-notification', (user) => {
@@ -74,17 +74,16 @@ socket.on('connect', () => {
       { scrollTop: $('#chat-div').prop('scrollHeight') },
       500,
     );
-    var audio = new Audio('/sound/message-sound.ogg');
-    audio.volume = 0.2;
+    const audio = new Audio('/sound/message-sound.ogg');
+    audio.volume = 0.3;
     audio.play();
   });
 
   socket.on('history', (title, permalink, thumbnail) => {
     addHistory(title, permalink, thumbnail);
     UIkit.notification(`${title}`, {
-      status: 'success',
-      pos: 'bottom-right',
-      timeout: 1000,
+      pos: 'bottom-center',
+      timeout: 500,
     });
   });
 
