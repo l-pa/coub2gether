@@ -1,6 +1,7 @@
 /* global getCoubId */
 /* global UIkit */
 /* global Audio */
+/* global player */
 
 const room = window.location.href.substring(
   window.location.href.lastIndexOf('/') + 1
@@ -66,6 +67,19 @@ socket.on('connect', () => {
       pos: 'top-center',
       timeout: 2000
     })
+  })
+
+  socket.on('youtube pause', () => {
+    player.pauseVideo()
+  })
+
+  socket.on('youtube buffering', (currentTime) => {
+    player.seekTo(currentTime, false)
+    player.playVideo()
+  })
+
+  socket.on('youtube play', () => {
+    player.playVideo()
   })
 
   socket.on('message-received', (user, text) => {

@@ -78,13 +78,11 @@
   </div>
 
 
-  <h2 class="uk-heading-primary">
-    <%= title %>
-      <h5 class="uk-text-lead uk-text-primary" id="roomId">
-        <a>
-          <%= room %>
-        </a>
-      </h5>
+  <h2 class="uk-heading-primary" uk-tooltip=" Its not just a Coub 😲 ">
+    <strike>Coub</strike>2Gether
+    <h5 class="uk-text-lead uk-text-primary" id="roomId">
+      <%= room %>
+    </h5>
   </h2>
 
 
@@ -93,7 +91,23 @@
     <div class="">
       <iframe class="uk-animation-fade" id="coubVideo" src="https://coub.com/embed/18vef7?muted=true&autostart=true&originalSize=false&hideTopBar=true&startWithHD=false&noSiteButtons=true"
         allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
-
+      <div id="player" class="response uk-animation-fade"></div>
+      <div class="input-group-append uk-margin-top uk-flex">
+        <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
+        <div class="uk-inline">
+          <button class="uk-button uk-button-default" type="button">Source</button>
+          <div uk-dropdown="mode: click">
+            <div class="uk-card uk-card-primary uk-card-body provider" id="provider-coub">
+              <h3>Coub</h3>
+            </div>
+            <hr class="uk-divider-icon">
+            <div class="uk-card uk-card-body provider" id="provider-youtube">
+              <h3 style="color: #fff;">Youtube</h3>
+            </div>
+          </div>
+        </div>
+        <button class="uk-button uk-button-default" id="rng-button" uk-tooltip="Random coub">RNG</button>
+      </div>
     </div>
 
     <div class="">
@@ -102,29 +116,26 @@
         <table class="table table-hover" id="chat-box">
         </table>
       </div>
-
       <div id="chat">
         <input id="message-text-input" class="uk-input" type="text" placeholder="Message">
       </div>
+
     </div>
   </div>
-  <div class="input-group-append uk-margin-top uk-flex">
-    <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
-    <button class="uk-button uk-button-default" id="rng-button">RNG</button>
-  </div>
 
-  <div class="footer">
+
+  <div class="footer ">
     Made with 💖 from
-    <a href="https://github.com/sikrit">@sikrit</a>
+    <a href="https://github.com/sikrit ">@sikrit</a>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js "></script>
   <script>
     var socket = io();
   </script>
 
-  <script src="/javascripts/socket.js"></script>
-  <script src="/javascripts/ui.js"></script>
+  <script src="/javascripts/ui.js "></script>
+  <script src="/javascripts/socket.js "></script>
   <script type='text/javascript' src='/javascripts/config.js'></script>
 
 </body>

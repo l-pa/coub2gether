@@ -63,3 +63,20 @@ h5 {
   width: 15%;
   margin: 0 auto;
 }
+.provider {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+#provider-coub {
+}
+
+#provider-youtube {
+  background-color: #c00;
+}
+.response {
+  width: 50vw;
+  height: 50vh;
+}

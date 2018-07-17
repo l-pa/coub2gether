@@ -1,10 +1,35 @@
 /* global Cookies */
 /* global UIkit */
 /* global getCoubId */
+/* global YT */
 
 function getCoubId (url) {
   const id = url.substring(url.lastIndexOf('/') + 1)
   return id
+}
+var player
+function onYouTubeIframeAPIReady () {
+  player = new YT.Player('player', {
+    height: '800',
+    width: '600',
+    videoId: 'Mji32lZ_Vj8',
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  })
+}
+
+function onPlayerReady (event) {
+  event.target.playVideo()
+}
+
+function onPlayerStateChange (event) {
+  socket.emit('youtube event', event)
+}
+
+function stopVideo () {
+  player.stopVideo()
 }
 
 $(document).ready(() => {
@@ -18,12 +43,39 @@ $(document).ready(() => {
   } else {
     socket.emit('username', Cookies.get('username'))
   }
-
+  $('#player').hide()
   $('#left-button').on('click', function () {
 
   })
   $('#right-button').on('click', function () {
 
+  })
+
+  $('#provider-coub').on('click', function () {
+    socket.emit('coub provider')
+  })
+
+  socket.on('coub show', () => {
+    $('#coub-link-input').attr('placeholder', 'Coub link')
+    stopVideo()
+    $('#player').hide()
+    $('#coubVideo').show()
+  })
+
+  $('#provider-youtube').on('click', function () {
+    socket.emit('youtube provider')
+  })
+
+  socket.on('youtube show', () => {
+    $('#coub-link-input').attr('placeholder', 'Youtube link')
+    $('#coubVideo').hide()
+    $('#player').show()
+
+    var tag = document.createElement('script')
+
+    tag.src = 'https://www.youtube.com/iframe_api'
+    var firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
   })
 
   $('#coubHistory').on('click', '.imageHistory', function () {

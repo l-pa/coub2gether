@@ -108,6 +108,26 @@ io.sockets.on('connection', socket => {
       io.in(room).emit('message-received', username, text)
     })
 
+    socket.on('youtube provider', () => {
+      io.in(room).emit('youtube show')
+    })
+
+    socket.on('coub provider', () => {
+      io.in(room).emit('coub show')
+    })
+
+    socket.on('youtube event', (event) => {
+      if (event.data == 3) {
+        io.in(room).emit('youtube buffering', event.target.j.currentTime)
+      }
+      if (event.data == 2) {
+        io.in(room).emit('youtube pause')
+      }
+      if (event.data == 1) {
+        io.in(room).emit('youtube play')
+      }
+    })
+
     socket.on('username', username => {
       socket.username = username
       socket.to(room).emit('user join', socket.username)
