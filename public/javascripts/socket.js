@@ -3,6 +3,8 @@
 /* global Audio */
 /* global player */
 
+var roomInfo
+
 const room = window.location.href.substring(
   window.location.href.lastIndexOf('/') + 1
 )
@@ -26,6 +28,7 @@ function message (user, text) {
   const $data = $(`<p><strong>${user}: </strong>${text}</p>`)
   $elementToAppend.append($data)
 }
+
 function removeUser (userId) {
   $(`#${userId}`).remove()
 }
@@ -38,16 +41,44 @@ function loadIframe (iframeName, url) {
   }
   return true
 }
+
+function waitForElement () {
+  if (isYTrdy == true) {
+    player.loadVideoById(getYoutubeId(roomInfo.lastLink))
+  } else {
+    setTimeout(waitForElement, 250)
+  }
+}
+
 socket.on('user join', (userId) => {
   addUser(userId)
   $('#users-title').text(`Users (${$('tbody#users').children('div').length})`)
 })
+
+
 socket.on('connect', () => {
   console.log(`Connected to ${room} with ID ${socket.id}`)
+
   socket.emit('room', room)
+
   //  socket.emit("user join", socket.id);
 
-  socket.emit('users in room')
+  socket.on('room info', (info) => {
+    roomInfo = info
+    console.log('Provider : ' + info.provider + ' last link ' + info.lastLink)
+    if (info.provider == 'youtube') {
+      socket.emit('youtube provider')
+      if (info.lastLink != null) {
+        waitForElement()
+        //   player.loadVideoById(getYoutubeId(info.lastLink))
+      }
+    } else {
+      socket.emit('coub provider')
+      if (info.lastLink != null) {
+        loadIframe('coubVideo', getCoubId(info.lastLink))
+      }
+    }
+  })
 
   socket.on('user left', (user) => {
     console.log(`User left : ${user}`)
@@ -74,11 +105,12 @@ socket.on('connect', () => {
   })
 
   socket.on('youtube buffering', (currentTime) => {
-    player.seekTo(currentTime, false)
-    player.playVideo()
+  //  player.seekTo(currentTime, false)
+  //  player.playVideo()
+    sync()
   })
 
-  socket.on('youtube play', () => {
+  socket.on('youtube play', (time) => {
     player.playVideo()
   })
 
@@ -101,8 +133,26 @@ socket.on('connect', () => {
     })
   })
 
-  socket.on('received link', (link) => {
+  socket.on('received link coub', (link) => {
     console.log(`Coub link: ${link}`)
+    player.pauseVideo()
+    document.getElementById('coubVideo').style.display = 'block' // hides the frame
+    document.getElementById('player').style.display = 'none' // hides the frame
+
+    var myCoub = document.getElementById('coubVideo').contentWindow
+    myCoub.postMessage('unmute', '*')
+    roomInfo.provider = 'coub'
     loadIframe('coubVideo', getCoubId(link))
+  })
+
+  socket.on('received link youtube', (link) => {
+    console.log(`Youtube link: ${link}`)
+    var myCoub = document.getElementById('coubVideo').contentWindow
+    myCoub.postMessage('mute', '*')
+    document.getElementById('coubVideo').style.display = 'none' // hides the frame
+    document.getElementById('player').style.display = 'block' // hides the frame
+    player.playVideo()
+    roomInfo = 'youtube'
+    player.loadVideoById(getYoutubeId(link))
   })
 })

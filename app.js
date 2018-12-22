@@ -39,6 +39,23 @@ function getCoubId (url) {
   const id = url.substring(url.lastIndexOf('/') + 1)
   return id
 }
+
+function validateYouTubeUrl (url) {
+  if (url != undefined || url != '') {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/
+    var match = url.match(regExp)
+    if (match && match[2].length == 11) {
+      // Do anything for being valid
+      // if need to change the url to embed url then use below line
+
+      return true
+    } else {
+      // Do anything for not being valid
+      return false
+    }
+  }
+}
+
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
@@ -56,6 +73,15 @@ function getRandomString (min, max) {
     .substr(2, Math.floor(Math.random() * (max - min + 1) + min))
 }
 
+function makeid () {
+  var text = ''
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+
+  for (var i = 0; i < 11; i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)) }
+
+  return text
+}
+
 io.sockets.on('connection', socket => {
   socket.on('get all rooms', () => {
     socket.emit('rooms info', io.sockets.adapter.rooms)
@@ -63,14 +89,16 @@ io.sockets.on('connection', socket => {
 
   socket.on('room', room => {
     socket.join(room)
-    function getJson (link) {
-      const urlA = `https://cors.io/?http://coub.com/api/v2/coubs/${getCoubId(
-        link
-      )}` // official coub api with proxy, long response
+    var roomInfo = {}
+    roomInfo.provider = io.sockets.adapter.rooms[room].provider
+    roomInfo.lastLink = io.sockets.adapter.rooms[room].lastLink
+
+    socket.emit('room info', roomInfo)
+
+    function coubJson (link) {
       const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(
         link
       )}` // undocumented coub api, works!
-      const urlB = `http://coub.com/api/v2/coubs/${link}` // official coub api, => error
 
       request(url, { json: true }, (err, res, body) => {
         if (err) {
@@ -78,7 +106,9 @@ io.sockets.on('connection', socket => {
         }
         if (body.title != null) {
           // socket.emit('history', body.title, body.permalink, body.small_picture);
-          io.in(room).emit('received link', getCoubId(body.url))
+          io.in(room).emit('received link coub', getCoubId(body.url))
+          io.sockets.adapter.rooms[room].lastLink = getCoubId(body.url)
+
           io.in(room).emit(
             'history',
             body.title,
@@ -86,22 +116,58 @@ io.sockets.on('connection', socket => {
             body.thumbnail_url
           )
         } else {
-          getJson(getRandomString(4, 6))
+          coubJson(getRandomString(4, 6))
         }
       })
     }
 
+    function youtubeJson (id) {
+      const url = 'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' + id + '&format=json'
+      request(url, { json: true }, (err, res, body) => {
+        if (err) {
+          return console.log(`${err}`)
+        }
+        console.log(body + ' ' + id)
+
+        /* if (body.title != null) {
+          // socket.emit('history', body.title, body.permalink, body.small_picture);
+          io.in(room).emit('received link coub', getCoubId(body.url))
+          io.sockets.adapter.rooms[room].lastLink = getCoubId(body.url)
+
+          io.in(room).emit(
+            'history',
+            body.title,
+            getCoubId(body.url),
+            body.thumbnail_url
+          )
+        } else {
+          coubJson(getRandomString(4, 6))
+        } */
+      })
+    }
+
     socket.on('history link', link => {
-      io.in(room).emit('received link', link)
+      io.in(room).emit('received link coub', link)
     })
 
     socket.on('sent link', link => {
-      getJson(link)
-      io.in(room).emit('received link', link)
+      if (validateYouTubeUrl(link)) {
+        io.in(room).emit('received link youtube', link)
+        io.sockets.adapter.rooms[room].provider = 'youtube'
+      } else {
+        coubJson(link)
+        io.in(room).emit('received link coub', link)
+        io.sockets.adapter.rooms[room].provider = 'coub'
+      }
+      io.sockets.adapter.rooms[room].lastLink = link
     })
 
-    socket.on('rng', () => {
-      getJson(getRandomString(4, 6))
+    socket.on('rng coub', () => {
+      coubJson(getRandomString(4, 6))
+    })
+
+    socket.on('rng youtube', () => {
+      youtubeJson(makeid())
     })
 
     socket.on('message', (username, text) => {
@@ -110,15 +176,19 @@ io.sockets.on('connection', socket => {
 
     socket.on('youtube provider', () => {
       io.in(room).emit('youtube show')
+      io.sockets.adapter.rooms[room].provider = 'youtube'
     })
 
     socket.on('coub provider', () => {
       io.in(room).emit('coub show')
+      io.sockets.adapter.rooms[room].provider = 'coub'
     })
 
-    socket.on('youtube event', (event) => {
+    var buffering = false
+
+    socket.on('youtube event', (event, time) => {
       if (event.data == 3) {
-        io.in(room).emit('youtube buffering', event.target.j.currentTime)
+        io.in(room).emit('youtube sync', time)
       }
       if (event.data == 2) {
         io.in(room).emit('youtube pause')
@@ -126,6 +196,11 @@ io.sockets.on('connection', socket => {
       if (event.data == 1) {
         io.in(room).emit('youtube play')
       }
+    })
+
+    socket.on('youtube sync', (time) => {
+      //   socket.to(room).emit('youtube sync', time)
+      io.in(room).emit('youtube sync', time)
     })
 
     socket.on('username', username => {

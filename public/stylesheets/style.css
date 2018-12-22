@@ -79,4 +79,9 @@ h5 {
 .response {
   width: 50vw;
   height: 50vh;
+  display: block;
+}
+
+#coubHistory{
+  background-color: #00b7ff;
 }

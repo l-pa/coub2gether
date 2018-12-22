@@ -3,16 +3,33 @@
 /* global getCoubId */
 /* global YT */
 
+var isYTrdy = false
+
 function getCoubId (url) {
   const id = url.substring(url.lastIndexOf('/') + 1)
   return id
 }
+
+function getYoutubeId (url) {
+  var ID = ''
+  url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i)
+    ID = ID[0]
+  } else {
+    ID = url
+  }
+  return ID
+}
+
 var player
+
 function onYouTubeIframeAPIReady () {
+  console.log('Youtube iframe loaded')
   player = new YT.Player('player', {
     height: '800',
     width: '600',
-    videoId: 'Mji32lZ_Vj8',
+    videoId: 'n8ve4k8IyTk',
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
@@ -21,15 +38,21 @@ function onYouTubeIframeAPIReady () {
 }
 
 function onPlayerReady (event) {
-  event.target.playVideo()
+  isYTrdy = true
+  event.target.seekTo(15)
+  event.target.pauseVideo()
 }
 
 function onPlayerStateChange (event) {
-  socket.emit('youtube event', event)
+  socket.emit('youtube event', event, player.getCurrentTime())
 }
 
 function stopVideo () {
   player.stopVideo()
+}
+
+function sync () {
+  socket.emit('youtube sync', player.getCurrentTime())
 }
 
 $(document).ready(() => {
@@ -53,29 +76,38 @@ $(document).ready(() => {
 
   $('#provider-coub').on('click', function () {
     socket.emit('coub provider')
+    roomInfo.provider = 'coub'
   })
+
 
   socket.on('coub show', () => {
     $('#coub-link-input').attr('placeholder', 'Coub link')
-    stopVideo()
-    $('#player').hide()
-    $('#coubVideo').show()
+
+    //  player.pauseVideo()
+    
+    document.getElementById('coubVideo').style.display = 'block' // hides the frame
+    document.getElementById('player').style.display = 'none' // hides the frame
+
+    var myCoub = document.getElementById('coubVideo').contentWindow
+    myCoub.postMessage('unmute', '*')
   })
 
   $('#provider-youtube').on('click', function () {
     socket.emit('youtube provider')
+    roomInfo.provider = 'youtube'
   })
 
   socket.on('youtube show', () => {
     $('#coub-link-input').attr('placeholder', 'Youtube link')
-    $('#coubVideo').hide()
-    $('#player').show()
+    var myCoub = document.getElementById('coubVideo').contentWindow
+    myCoub.postMessage('mute', '*')
+    document.getElementById('coubVideo').style.display = 'none' // hides the frame
+    document.getElementById('player').style.display = 'block' // hides the frame
+    //player.playVideo()
+  })
 
-    var tag = document.createElement('script')
-
-    tag.src = 'https://www.youtube.com/iframe_api'
-    var firstScriptTag = document.getElementsByTagName('script')[0]
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+  socket.on('youtube sync', (time) => {
+    player.seekTo(time)
   })
 
   $('#coubHistory').on('click', '.imageHistory', function () {
@@ -126,7 +158,15 @@ $(document).ready(() => {
   })
   $('#rng-button').click(() => {
     //    const link = Math.random().toString(36).substr(2, Math.floor(Math.random() * (6 - 4 + 1) + 4));
-    socket.emit('rng')
+    console.log(roomInfo.provider)
+    
+    if (roomInfo.provider == 'coub' || roomInfo.provider == null) {
+      socket.emit('rng coub')
+    }
+
+    if (roomInfo.provider == 'youtube') {
+      socket.emit('rng youtube')
+    }
     /* $('#coub-link-input').val(link);
     $('#coub-link-input').val(''); */
   })
