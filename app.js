@@ -35,12 +35,12 @@ app.use((req, res, next) => {
   //  next(createError(404));
 })
 
-function getCoubId (url) {
+function getCoubId(url) {
   const id = url.substring(url.lastIndexOf('/') + 1)
   return id
 }
 
-function validateYouTubeUrl (url) {
+function validateYouTubeUrl(url) {
   if (url != undefined || url != '') {
     var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/
     var match = url.match(regExp)
@@ -67,13 +67,13 @@ app.use((err, req, res) => {
   res.render('error')
 })
 
-function getRandomString (min, max) {
+function getRandomString(min, max) {
   return Math.random()
     .toString(36)
     .substr(2, Math.floor(Math.random() * (max - min + 1) + min))
 }
 
-function makeid () {
+function makeid() {
   var text = ''
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
@@ -95,7 +95,7 @@ io.sockets.on('connection', socket => {
 
     socket.emit('room info', roomInfo)
 
-    function coubJson (link) {
+    function coubJson(link) {
       const url = `http://coub.com/api/oembed.json?url=http%3A//coub.com/view/${getCoubId(
         link
       )}` // undocumented coub api, works!
@@ -121,7 +121,7 @@ io.sockets.on('connection', socket => {
       })
     }
 
-    function youtubeJson (id) {
+    function youtubeJson(id) {
       const url = 'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' + id + '&format=json'
       request(url, { json: true }, (err, res, body) => {
         if (err) {
@@ -184,8 +184,6 @@ io.sockets.on('connection', socket => {
       io.sockets.adapter.rooms[room].provider = 'coub'
     })
 
-    var buffering = false
-
     socket.on('youtube event', (event, time) => {
       if (event.data == 3) {
         io.in(room).emit('youtube sync', time)
@@ -203,8 +201,9 @@ io.sockets.on('connection', socket => {
       io.in(room).emit('youtube sync', time)
     })
 
-    socket.on('username', username => {
+    socket.on('username', (username) => {
       socket.username = username
+
       socket.to(room).emit('user join', socket.username)
       io.in(room).emit('username-join-notification', socket.username)
 

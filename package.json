@@ -1,6 +1,6 @@
 {
   "name": "coub2gether",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "start": "node ./app.js",

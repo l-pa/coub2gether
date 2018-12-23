@@ -26,7 +26,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
-  <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -103,19 +102,7 @@
         allowfullscreen="true" frameborder="0" width="800vw" height="600vh" allow="autoplay"></iframe>
       <div id="player" class="response uk-animation-fade"></div>
       <div class="input-group-append uk-margin-top uk-flex">
-        <input id="coub-link-input" class="uk-input" type="text" placeholder="Coub link">
-        <div class="uk-inline">
-          <button class="uk-button uk-button-default" type="button">Source</button>
-          <div uk-dropdown="mode: click">
-            <div class="uk-card uk-card-primary uk-card-body provider" id="provider-coub">
-              <h3>Coub</h3>
-            </div>
-            <hr class="uk-divider-icon">
-            <div class="uk-card uk-card-body provider" id="provider-youtube">
-              <h3 style="color: #fff;">Youtube</h3>
-            </div>
-          </div>
-        </div>
+        <input id="coub-link-input" class="uk-input" type="text" placeholder="Link">
         <button class="uk-button uk-button-default" id="rng-button" uk-tooltip="Random coub">RNG</button>
       </div>
     </div>
@@ -144,8 +131,10 @@
     var socket = io();
   </script>
 
-  <script src="/javascripts/ui.js "></script>
   <script src="/javascripts/socket.js "></script>
+  <script src="/javascripts/ui.js "></script>
+  <script src="/javascripts/coub.js "></script>
+  <script src="/javascripts/youtube.js "></script>
 
 </body>
 
